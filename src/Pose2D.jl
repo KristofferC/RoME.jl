@@ -36,12 +36,14 @@ end
 
 """
 $(TYPEDEF)
+A 2D measurement factor (x,y,θ) describing relationship between two Pose2s.
 """
 mutable struct Pose2Pose2{T} <: IncrementalInference.FunctorPairwise where {T <: IIF.SamplableBelief}
   z::T
   Pose2Pose2{T}() where {T <: IIF.SamplableBelief} = new{T}()
   Pose2Pose2{T}(z1::T) where {T <: IIF.SamplableBelief} = new{T}(z1)
 end
+Pose2Pose2(FactorTestingFlag) = Pose2Pose2(MvNormal([0, 0, 0], [0.1 0 0;0 0.1 0;0 0 0.01]))
 Pose2Pose2(z::T) where {T <: IIF.SamplableBelief} = Pose2Pose2{T}(z)
 function Pose2Pose2(mean::Array{Float64,1}, cov::Array{Float64,2})
   @warn "Pose2Pose2(mu,cov) is deprecated in favor of Pose2Pose2(T(...)) -- use for example Pose2Pose2(MvNormal(mu, cov))"
@@ -68,6 +70,7 @@ end
 
 """
 $(TYPEDEF)
+A 2D Prior.
 """
 mutable struct PriorPose2{T} <: IncrementalInference.FunctorSingleton  where {T <: Distributions.Distribution}
     Z::T

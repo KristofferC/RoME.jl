@@ -10,8 +10,10 @@ $(TYPEDEF)
 mutable struct PriorPose3 <: IncrementalInference.FunctorSingleton
     Zi::Distribution
     PriorPose3() = new()
-    PriorPose3(st::FloatInt, sr::Float64) = new( MvNormal(zeros(6), [[st*Matrix{Float64}(LinearAlgebra.I, 3,3);zeros(3,3)];[zeros(3);sr*Matrix{Float64}(LinearAlgebra.I, 3,3)]] )  )
+    PriorPose3(st::FloatInt, sr::Float64) = new( MvNormal(zeros(6), hcat([0.01*Matrix{Float64}(LinearAlgebra.I, 3,3);zeros(3,3)],[zeros(3,3);0.1*Matrix{Float64}(LinearAlgebra.I, 3,3)])))
     PriorPose3(s::Distribution) = new(s)
+    # Optional for testing
+    PriorPose3(::Type{FactorTestingFlag}) = new( MvNormal(zeros(6), hcat([0.01*Matrix{Float64}(LinearAlgebra.I, 3,3);zeros(3,3)],[zeros(3,3);0.1*Matrix{Float64}(LinearAlgebra.I, 3,3)])))
 end
 function getSample(p3::PriorPose3, N::Int=1)
   # mv = Distributions.MvNormal(veeEuler(p3.Zi), p3.Cov)
