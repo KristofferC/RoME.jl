@@ -14,6 +14,7 @@ using
   Graphs,
   Rotations,
   CoordinateTransformations,
+  ApproxManifoldProducts,
   JLD2,
   ProgressMeter,
   DocStringExtensions
@@ -22,6 +23,7 @@ import Base: +, \, convert
 import TransformUtils: ⊖, ⊕, convert, compare, ominus, veeQuaternion
 import IncrementalInference: convert, getSample, reshapeVec2Mat, extractdistribution  #, compare
 
+const AMP = ApproxManifoldProducts
 
 export
   initfg,  # RoME specific functions
@@ -248,7 +250,10 @@ export
   PartialPose3XYYaw,
   PackedPartialPose3XYYaw,
   PartialPose3XYYawNH,
-  PackedPartialPose3XYYawNH
+  PackedPartialPose3XYYawNH,
+
+  # random util -- move to IIF
+  getIdx
 
 
   # # solve with isam in pytslam

@@ -15,23 +15,22 @@ function compare(a::IncrementalInference.GenericFunctionNodeData{T1,S},b::Increm
 end
 
 
-
 # Pose2 functions for Robot Motion Estimate
+
 
 """
 $(TYPEDEF)
 """
 struct Pose2 <: IncrementalInference.InferenceVariable
   dims::Int
+  dimtype::Tuple{Tuple{Symbol, Symbol}, Tuple{Symbol}}
+  manifolds::Tuple{AMP.Euclid2, AMP.Circular}
   labels::Vector{String}
-  Pose2() = new(3, String["POSE";])
+  Pose2(lbls::Vector{<:AbstractString}=String["POSE";]) = new(3,
+                                                              ((:posX, :posY),(:rotZ,)),
+                                                              (AMP.Euclid2(), AMP.Circular()),
+                                                              lbls  )
 end
-
-# # Done - move to IncrementalInference
-# struct Prior{T} <: IncrementalInference.FunctorSingleton where {T <: Distribution}
-#   z::T
-# end
-# getSample(s::Prior, N::Int=1) = (rand(s.z,N), )
 
 
 """

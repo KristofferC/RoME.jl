@@ -4,9 +4,48 @@ $(TYPEDEF)
 """
 struct Point2 <: IncrementalInference.InferenceVariable
   dims::Int
+  dimtype::Tuple{Tuple{Symbol,Symbol}}
+  manifolds::Tuple{AMP.Euclid2}
   labels::Vector{String}
-  Point2() = new(2, String[])
+  Point2(lbls::Vector{<:AbstractString}=String[]) = new(2,
+                                                        ((:posX, :posY),),
+                                                        (AMP.Euclid2,),
+                                                        lbls)
 end
+
+"""
+    $SIGNATURES
+
+Return interger index of desired variable element.
+
+Example
+-------
+```julia
+pp = RoME.Point2()
+getIdx(pp, :posY) # = 2
+```
+
+Internal Notes
+--------------
+- uses number i < 100 for index number, and
+- uses +100 offsets to track the minibatch number of the requested dimension
+"""
+function getIdx(pp::T, sym::Symbol, i::Int=0)::Tuple{Int, Int} where {T <: Tuple}
+  # i > 99 ? error("stop") : nothing
+  i-=100
+  for p in pp
+    i,j = getIdx(p, sym, i)
+    if i > 0
+      return i, j
+    end
+  end
+  return i,-1
+end
+getIdx(pp::Symbol, sym::Symbol, i::Int=0)::Tuple{Int, Int} = pp==sym ? (abs(i)%100+1, div(abs(i)-100,100)) : (i-1, div(abs(i)-100,100))
+function getIdx(pp::V, sym::Symbol, i::Int=0)::Tuple{Int, Int} where {V <: InferenceVariable}
+  return getIdx(pp.dimtype, sym)
+end
+
 
 """
 $(TYPEDEF)
