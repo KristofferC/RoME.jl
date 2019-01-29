@@ -250,16 +250,9 @@ export
   PartialPose3XYYaw,
   PackedPartialPose3XYYaw,
   PartialPose3XYYawNH,
-  PackedPartialPose3XYYawNH,
-
-  # random util -- move to IIF
-  getIdx
+  PackedPartialPose3XYYawNH
 
 
-  # # solve with isam in pytslam
-  # doISAMSolve,
-  # drawCompPosesLandm,
-  #
   # # Victoria Park data specific
   # addLandmarksFactoGraph!,
   # appendFactorGraph!,
